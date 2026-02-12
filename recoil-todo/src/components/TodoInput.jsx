@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
 import { todoListState } from "../atoms/todoAtom";
 
 export default function TodoInput() {
-  const [text, setText] = useState("");
-  const setTodos = useSetRecoilState(todoListState);
+  const [todos, setTodos] = useRecoilState(todoListState);
+  const [inputValue, setInputValue] = useState("");
 
   const addTodo = () => {
-    if (!text.trim()) return;
-
-    setTodos(old => [
-      ...old,
-      { id: Date.now(), text, completed: false }
-    ]);
-
-    setText("");
+    if (inputValue.trim() === "") return;
+    setTodos([...todos, { text: inputValue, completed: false }]);
+    setInputValue("");
   };
 
   return (
-    <div>
+    <div className="flex">
       <input
-        type="text"
-        placeholder="Add a task..."
-        value={text}
-        onChange={e => setText(e.target.value)}
+        className="border p-2 flex-1 rounded"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Add a todo"
       />
-      <button onClick={addTodo}>Add</button>
+      <button
+        className="bg-blue-500 text-white px-4 ml-2 rounded"
+        onClick={addTodo}
+      >
+        Add
+      </button>
     </div>
   );
 }
